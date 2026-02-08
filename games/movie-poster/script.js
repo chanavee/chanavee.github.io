@@ -13,7 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
     //     'img/4.jpg',
     //     'img/5.jpg'
     // ];
-    const posters = Array.from({ length: TOTAL_IMAGES }, (_, i) => `img/${i + 1}.jpg`);
+    const posters = Array.from({ length: TOTAL_IMAGES }, (_, i) => `/games/movie-poster/img/${i + 1}.jpg`);
+    function preloadImages() {
+    posters.forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
+    console.log(`${posters.length} images preloaded.`);
+}
 
     let currentPosterIndex = -1;
     let availablePosters = [...posters];
@@ -26,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize Game
     function init() {
+        preloadImages(); // Start downloading in the background
         if (availablePosters.length === 0) {
             // Reset if all shown
             availablePosters = [...posters];
