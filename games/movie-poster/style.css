@@ -42,8 +42,14 @@ h1 {
 
 .poster-container {
     position: relative;
-    width: 300px; /* Adjust based on your poster aspect ratio */
-    height: 450px; /* Standard poster ratio 2:3 */
+    height: 80vh;
+    /* Use viewport height */
+    aspect-ratio: 2/3;
+    /* Maintain poster aspect ratio */
+    width: auto;
+    /* Width adjusts based on height and aspect-ratio */
+    max-width: 90vw;
+    /* Ensure it fits width-wise too */
     margin: 0 auto 2rem;
     border-radius: 12px;
     overflow: hidden;
