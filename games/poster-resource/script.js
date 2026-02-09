@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const TOTAL_IMAGES = 20;
 
     // Put your images in the 'img' folder and update these filenames
-    const posters = Array.from({ length: TOTAL_IMAGES }, (_, i) => `img/${i + 1}.jpg`);
+    const posters = Array.from({ length: TOTAL_IMAGES }, (_, i) => `/games/poster-resource/img/${i + 1}.jpg`);
     function preloadImages() {
         posters.forEach(src => {
             const img = new Image();
