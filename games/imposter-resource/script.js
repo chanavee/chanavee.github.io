@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameStatusText = document.getElementById('game-status');
 
     // State
-    let gameData = {};
+    let categories = [];
+    const categoryDataCache = {}; // Cache for loaded category data
     let players = [];
     let currentItem = "";
     let currentPlayerIndex = 0;
@@ -28,23 +29,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let totalPlayers = 0;
     let totalImposters = 0;
 
-    // Fetch Data
-    fetch('imposter-resource/data.json')
+    // Fetch Categories
+    fetch('imposter-resource/category.json')
         .then(response => response.json())
         .then(data => {
-            gameData = data;
+            categories = data;
             populateCategories();
         })
         .catch(err => {
-            console.error('Error loading game data:', err);
+            console.error('Error loading categories:', err);
             errorMsg.textContent = "Failed to load game categories.";
         });
 
     function populateCategories() {
-        if (!gameData.categories) return;
+        if (!categories) return;
 
         categorySelect.innerHTML = '';
-        gameData.categories.forEach((cat, index) => {
+        categories.forEach((cat, index) => {
             const option = document.createElement('option');
             option.value = index;
             option.textContent = cat.name;
@@ -92,11 +93,31 @@ document.addEventListener('DOMContentLoaded', () => {
         totalPlayers = parseInt(playerCountInput.value);
         totalImposters = parseInt(imposterCountInput.value);
         const catIndex = categorySelect.value;
-        const selectedCategory = gameData.categories[catIndex];
+        const selectedCategory = categories[catIndex];
 
+        // Check Cache
+        if (categoryDataCache[selectedCategory.name]) {
+            startRound(categoryDataCache[selectedCategory.name]);
+        } else {
+            // Fetch Data for Selected Category
+            fetch(`imposter-resource/${selectedCategory.file}`)
+                .then(response => response.json())
+                .then(items => {
+                    // Cache the data
+                    categoryDataCache[selectedCategory.name] = items;
+                    startRound(items);
+                })
+                .catch(err => {
+                    console.error('Error loading category data:', err);
+                    errorMsg.textContent = "Failed to load game data.";
+                });
+        }
+    }
+
+    function startRound(items) {
         // Pick Random Item
-        const randomItemIndex = Math.floor(Math.random() * selectedCategory.items.length);
-        currentItem = selectedCategory.items[randomItemIndex];
+        const randomItemIndex = Math.floor(Math.random() * items.length);
+        currentItem = items[randomItemIndex];
 
         // Assign Roles
         players = Array(totalPlayers).fill('Innocent');
@@ -179,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h2>All Roles Assigned!</h2>
             <p>Start discussing and find the Imposter!</p>
             <br>
-            <p style="color: #666; font-size: 0.8rem">Category: ${gameData.categories[categorySelect.value].name}</p>
+            <p style="color: #666; font-size: 0.8rem">Category: ${categories[categorySelect.value].name}</p>
         `;
     }
 

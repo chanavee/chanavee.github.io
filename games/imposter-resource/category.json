@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Movies",
+    "file": "data-movies.json"
+  },
+  {
+    "name": "Anime",
+    "file": "data-anime.json"
+  },
+  {
+    "name": "Food",
+    "file": "data-food.json"
+  },
+  {
+    "name": "Animals",
+    "file": "data-animals.json"
+  },
+  {
+    "name": "Occupations",
+    "file": "data-occupations.json"
+  },
+  {
+    "name": "Countries",
+    "file": "data-countries.json"
+  },
+  {
+    "name": "Sports",
+    "file": "data-sports.json"
+  },
+  {
+    "name": "Household Objects",
+    "file": "data-household-objects.json"
+  },
+  {
+    "name": "Transportation",
+    "file": "data-transportation.json"
+  },
+  {
+    "name": "Clothing",
+    "file": "data-clothing.json"
+  },
+  {
+    "name": "Instruments",
+    "file": "data-instruments.json"
+  },
+  {
+    "name": "Places",
+    "file": "data-places.json"
+  }
+]
