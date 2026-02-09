@@ -89,15 +89,51 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         errorMsg.textContent = "";
 
+        const startBtn = document.getElementById('start-btn');
+        startBtn.disabled = true;
+        startBtn.textContent = "Loading...";
+
         // Setup Game State
         totalPlayers = parseInt(playerCountInput.value);
         totalImposters = parseInt(imposterCountInput.value);
         const catIndex = categorySelect.value;
         const selectedCategory = categories[catIndex];
 
+        const onDataLoaded = (items) => {
+            // Reset Button (even though screen changes, good practice)
+            startBtn.disabled = false;
+            startBtn.textContent = "Start Game";
+
+            // Pick Random Item
+            const randomItemIndex = Math.floor(Math.random() * items.length);
+            currentItem = items[randomItemIndex];
+
+            // Assign Roles
+            players = Array(totalPlayers).fill('Innocent');
+            for (let i = 0; i < totalImposters; i++) {
+                players[i] = 'Imposter';
+            }
+            shuffle(players);
+
+            // Reset Turn State
+            currentPlayerIndex = 0;
+            isRevealed = false;
+
+            // UI Transition
+            showScreen('game');
+            updateGameScreen();
+        };
+
+        const onError = (err) => {
+            console.error('Error loading category data:', err);
+            errorMsg.textContent = "Failed to load game data.";
+            startBtn.disabled = false;
+            startBtn.textContent = "Start Game";
+        };
+
         // Check Cache
         if (categoryDataCache[selectedCategory.name]) {
-            startRound(categoryDataCache[selectedCategory.name]);
+            onDataLoaded(categoryDataCache[selectedCategory.name]);
         } else {
             // Fetch Data for Selected Category
             fetch(`imposter-resource/${selectedCategory.file}`)
@@ -105,34 +141,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(items => {
                     // Cache the data
                     categoryDataCache[selectedCategory.name] = items;
-                    startRound(items);
+                    onDataLoaded(items);
                 })
-                .catch(err => {
-                    console.error('Error loading category data:', err);
-                    errorMsg.textContent = "Failed to load game data.";
-                });
+                .catch(onError);
         }
-    }
-
-    function startRound(items) {
-        // Pick Random Item
-        const randomItemIndex = Math.floor(Math.random() * items.length);
-        currentItem = items[randomItemIndex];
-
-        // Assign Roles
-        players = Array(totalPlayers).fill('Innocent');
-        for (let i = 0; i < totalImposters; i++) {
-            players[i] = 'Imposter';
-        }
-        shuffle(players);
-
-        // Reset Turn State
-        currentPlayerIndex = 0;
-        isRevealed = false;
-
-        // UI Transition
-        showScreen('game');
-        updateGameScreen();
     }
 
     function updateGameScreen() {
