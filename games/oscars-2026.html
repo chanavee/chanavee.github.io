@@ -5,11 +5,153 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oscars 2026 Prediction Game</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/css/oscars.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+
+        :root {
+            --oscar-gold: #D4AF37;
+            --oscar-gold-dark: #aa8a2e;
+            --oscar-gold-alpha: rgba(212, 175, 55, 0.15);
+            --oscar-black: #0a0a0a;
+            --oscar-gray: #1a1a1a;
+            --oscar-text: #e0e0e0;
+        }
+
+        body {
+            background-color: var(--oscar-black);
+            color: var(--oscar-text);
+            font-family: 'Inter', sans-serif;
+            background-image: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            min-height: 100vh;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        h1, h2, h3, .oscar-font {
+            font-family: 'Cinzel', serif;
+            color: var(--oscar-gold);
+        }
+
+        .oscar-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            table-layout: auto;
+        }
+
+        .oscar-table th {
+            background-color: var(--oscar-gray);
+            border-bottom: 2px solid var(--oscar-gold);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .oscar-table td {
+            border-bottom: 1px solid #333;
+            padding: 0.75rem;
+            background-color: rgba(255, 255, 255, 0.02);
+            transition: background-color 0.3s ease;
+        }
+
+        /* ไฮไลท์สีทองเมื่อมีคนเลือก */
+        .row-selected td {
+            background-color: var(--oscar-gold-alpha) !important;
+        }
+
+        .category-header {
+            background: linear-gradient(90deg, var(--oscar-gold-dark), transparent);
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 12px 20px !important;
+            font-family: 'Cinzel', serif;
+            position: sticky;
+            left: 0;
+            z-index: 10;
+        }
+
+        .checkbox-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        input[type="checkbox"] {
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--oscar-gold);
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        input[type="checkbox"]:checked {
+            background-color: var(--oscar-gold);
+            box-shadow: 0 0 10px var(--oscar-gold);
+        }
+
+        input[type="checkbox"]:checked::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: black;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .btn-gold {
+            background-color: var(--oscar-gold);
+            color: black;
+            font-weight: bold;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+
+        .btn-gold:hover {
+            background-color: #fff;
+            box-shadow: 0 0 15px var(--oscar-gold);
+        }
+
+        .player-name-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--oscar-gold);
+            color: var(--oscar-gold);
+            text-align: center;
+            width: 120px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .nominee-detail {
+            font-size: 0.75rem;
+            color: #888;
+            display: block;
+            max-width: 400px;
+        }
+        
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: var(--oscar-gold-dark); border-radius: 4px; }
+    </style>
 </head>
 <body class="p-4 md:p-8">
 
-    <header class="text-center mb-10 will-change-transform">
+    <header class="text-center mb-10">
         <h1 class="text-4xl md:text-6xl mb-2">OSCARS 2026</h1>
         <p class="text-lg opacity-80 uppercase tracking-widest font-light">The 98th Academy Awards Prediction Pool</p>
     </header>
@@ -18,40 +160,29 @@
         
         <div class="flex flex-wrap gap-4 mb-6 justify-between items-center">
             <div class="flex gap-2">
-                <button onclick="addPlayer()" class="btn-gold flex items-center gap-2">
-                    <span>Add Player</span>
-                </button>
+                <button onclick="addPlayer()" class="btn-gold">Add Player</button>
             </div>
             <div class="flex gap-3">
-                <button onclick="exportData()" class="px-3 py-2 border border-gray-600 hover:border-oscar-gold rounded transition text-xs text-gray-300">
-                    Export JSON
-                </button>
-                <label class="px-3 py-2 border border-gray-600 hover:border-oscar-gold rounded transition text-xs cursor-pointer text-gray-300">
+                <button onclick="exportData()" class="px-3 py-2 border border-gray-600 rounded text-xs text-gray-300">Export JSON</button>
+                <label class="px-3 py-2 border border-gray-600 rounded text-xs cursor-pointer text-gray-300">
                     Import JSON
                     <input type="file" id="importFile" class="hidden" onchange="importData(event)">
                 </label>
-                <button onclick="resetGame()" class="px-3 py-2 text-red-500 hover:text-red-400 text-xs font-semibold">
-                    Reset All
-                </button>
+                <button onclick="resetGame()" class="px-3 py-2 text-red-500 text-xs font-semibold">Reset All</button>
             </div>
         </div>
 
-        <div class="overflow-x-auto rounded-lg border border-[#333] relative" style="max-height: 80vh;">
-            <table class="oscar-table" id="predictionTable">
+        <div class="overflow-x-auto rounded-lg border border-[#333]" style="max-height: 80vh;">
+            <table class="oscar-table">
                 <thead>
                     <tr id="headerRow">
                         <th class="text-left min-w-[350px] oscar-font">Categories / Nominees</th>
                     </tr>
                 </thead>
-                <tbody id="tableBody">
-                </tbody>
+                <tbody id="tableBody"></tbody>
             </table>
         </div>
     </div>
-
-    <footer class="mt-12 text-center text-gray-600 text-[10px] pb-10 uppercase tracking-widest">
-        &copy; 2026 Academy of Motion Picture Arts and Sciences Prediction Tool
-    </footer>
 
     <script>
         const categories = [
@@ -232,10 +363,10 @@
 
         let state = {
             players: [],
-            votes: {}
+            votes: {} // Structure: votes[categoryId][playerId] = nomineeId
         };
 
-        const STORAGE_KEY = "oscars_2026_votes_final_v1";
+        const STORAGE_KEY = "oscars_2026_votes_v5_final";
 
         function init() {
             const saved = localStorage.getItem(STORAGE_KEY);
@@ -251,6 +382,97 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         }
 
+        function handleVote(categoryId, nomineeId, playerId, isChecked) {
+            if (!state.votes[categoryId]) state.votes[categoryId] = {};
+            
+            const prevNomineeId = state.votes[categoryId][playerId];
+
+            if (isChecked) {
+                // ยกเลิกตัวเดิมของ Player นี้ในสาขานี้
+                if (prevNomineeId && prevNomineeId !== nomineeId) {
+                    const prevInput = document.querySelector(`input[data-cat="${categoryId}"][data-player="${playerId}"][data-nom="${prevNomineeId}"]`);
+                    if (prevInput) prevInput.checked = false;
+                    
+                    // บันทึกการเอาออกชั่วคราวเพื่อตรวจสอบไฮไลท์
+                    delete state.votes[categoryId][playerId];
+                    updateRowHighlight(categoryId, prevNomineeId);
+                }
+                
+                // บันทึกตัวใหม่
+                state.votes[categoryId][playerId] = nomineeId;
+            } else {
+                delete state.votes[categoryId][playerId];
+            }
+            
+            // อัปเดตไฮไลท์แถวปัจจุบัน
+            updateRowHighlight(categoryId, nomineeId);
+            save();
+        }
+
+        function updateRowHighlight(categoryId, nomineeId) {
+            const row = document.getElementById(`row-${nomineeId}`);
+            if (!row) return;
+
+            // ตรวจสอบว่ามี Player คนไหนเลือก Nominee คนนี้ใน Category นี้อยู่หรือไม่
+            const hasAnyVotes = Object.values(state.votes[categoryId] || {}).includes(nomineeId);
+            
+            if (hasAnyVotes) {
+                row.classList.add('row-selected');
+            } else {
+                row.classList.remove('row-selected');
+            }
+        }
+
+        function renderTable() {
+            const headerRow = document.getElementById('headerRow');
+            const tableBody = document.getElementById('tableBody');
+
+            // Header
+            let headerHtml = '<th class="text-left min-w-[350px] oscar-font">Categories / Nominees</th>';
+            state.players.forEach((player, idx) => {
+                headerHtml += `
+                    <th>
+                        <div class="flex flex-col items-center gap-2">
+                            <input type="text" class="player-name-input" value="${player.name}" 
+                                   onchange="updatePlayerName(${idx}, this.value)">
+                        </div>
+                    </th>`;
+            });
+            headerRow.innerHTML = headerHtml;
+
+            // Body
+            let bodyHtml = '';
+            categories.forEach(cat => {
+                bodyHtml += `<tr><td colspan="${state.players.length + 1}" class="category-header">${cat.name}</td></tr>`;
+
+                cat.nominees.forEach(nom => {
+                    const isAnyOneSelected = Object.values(state.votes[cat.id] || {}).includes(nom.id);
+                    
+                    bodyHtml += `
+                    <tr id="row-${nom.id}" class="nominee-row ${isAnyOneSelected ? 'row-selected' : ''}">
+                        <td class="border-r border-[#333]">
+                            <div class="font-semibold text-sm">${nom.name}</div>
+                            <div class="nominee-detail">${nom.detail}</div>
+                        </td>`;
+
+                    state.players.forEach(player => {
+                        const isChecked = state.votes[cat.id]?.[player.id] === nom.id;
+                        bodyHtml += `
+                            <td class="text-center">
+                                <div class="checkbox-container">
+                                    <input type="checkbox" 
+                                        data-cat="${cat.id}" data-player="${player.id}" data-nom="${nom.id}"
+                                        ${isChecked ? 'checked' : ''} 
+                                        onchange="handleVote('${cat.id}', '${nom.id}', '${player.id}', this.checked)">
+                                </div>
+                            </td>`;
+                    });
+                    bodyHtml += `</tr>`;
+                });
+            });
+            tableBody.innerHTML = bodyHtml;
+        }
+
         function addPlayer() {
             const id = 'p' + Date.now();
             state.players.push({ id, name: 'Player ' + (state.players.length + 1) });
@@ -263,141 +485,29 @@
             save();
         }
 
-        function handleVote(categoryId, nomineeId, nomineeName, playerId, isChecked) {
-            if (!state.votes[categoryId]) state.votes[categoryId] = {};
-            
-            if (isChecked) {
-                state.votes[categoryId][playerId] = { id: nomineeId, name: nomineeName };
-            } else {
-                delete state.votes[categoryId][playerId];
-            }
-            
-            const row = document.getElementById(`row-${nomineeId}`);
-            if (row) {
-                const anyVotes = Object.values(state.votes[categoryId]).some(v => v.id === nomineeId);
-                row.classList.toggle('row-selected', anyVotes);
-            }
-            
-            save();
-        }
-
-        function renderTable() {
-            const headerRow = document.getElementById('headerRow');
-            const tableBody = document.getElementById('tableBody');
-
-            let headerHtml = '<th class="text-left min-w-[350px] oscar-font">Categories / Nominees</th>';
-            state.players.forEach((player, idx) => {
-                headerHtml += `
-                    <th class="will-change-transform">
-                        <div class="flex flex-col items-center gap-2">
-                            <input type="text" class="player-name-input" value="${player.name}" 
-                                   onchange="updatePlayerName(${idx}, this.value)">
-                            <span class="text-[9px] text-gray-500 font-normal uppercase tracking-widest">Predictor</span>
-                        </div>
-                    </th>
-                `;
-            });
-            headerRow.innerHTML = headerHtml;
-
-            let bodyHtml = '';
-            categories.forEach(cat => {
-                bodyHtml += `<tr><td colspan="${state.players.length + 1}" class="category-header">${cat.name}</td></tr>`;
-
-                cat.nominees.forEach(nom => {
-                    const anyVotes = state.votes[cat.id] && Object.values(state.votes[cat.id]).some(v => v.id === nom.id);
-                    const rowClass = anyVotes ? 'nominee-row row-selected' : 'nominee-row';
-                    
-                    bodyHtml += `<tr id="row-${nom.id}" class="${rowClass}">
-                        <td class="border-r border-[#333]">
-                            <div class="font-semibold text-sm">${nom.name}</div>
-                            <div class="nominee-detail">${nom.detail}</div>
-                        </td>`;
-
-                    state.players.forEach(player => {
-                        const isChecked = state.votes[cat.id]?.[player.id]?.id === nom.id;
-                        bodyHtml += `
-                            <td class="text-center">
-                                <div class="checkbox-container">
-                                    <input type="checkbox" 
-                                        ${isChecked ? 'checked' : ''} 
-                                        onchange="handleVote('${cat.id}', '${nom.id}', '${nom.name}', '${player.id}', this.checked)">
-                                </div>
-                            </td>`;
-                    });
-                    bodyHtml += `</tr>`;
-                });
-            });
-            tableBody.innerHTML = bodyHtml;
-        }
-
         function exportData() {
-            const exportFormat = categories.map(cat => {
-                const playerNamedVotes = {};
-                state.players.forEach(player => {
-                    if (state.votes[cat.id] && state.votes[cat.id][player.id]) {
-                        playerNamedVotes[player.name] = state.votes[cat.id][player.id];
-                    }
-                });
-                return {
-                    category: cat.name,
-                    categoryId: cat.id,
-                    vote: playerNamedVotes
-                };
-            });
-
-            const blob = new Blob([JSON.stringify(exportFormat, null, 2)], {type: "application/json"});
+            const blob = new Blob([JSON.stringify(state, null, 2)], {type: "application/json"});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = "oscars_2026_predictions_updated.json";
+            a.download = "oscars_prediction.json";
             a.click();
-            URL.revokeObjectURL(url);
         }
 
         function importData(event) {
             const file = event.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const imported = JSON.parse(e.target.result);
-                    const newVotes = {};
-                    const newPlayers = [];
-                    const playerNameMap = {};
-
-                    imported.forEach(item => {
-                        Object.keys(item.vote).forEach(pName => {
-                            if (!playerNameMap[pName]) {
-                                const pId = 'p_' + Math.random().toString(36).substr(2, 9);
-                                playerNameMap[pName] = pId;
-                                newPlayers.push({ id: pId, name: pName });
-                            }
-                        });
-                    });
-
-                    imported.forEach(item => {
-                        newVotes[item.categoryId] = {};
-                        Object.keys(item.vote).forEach(pName => {
-                            const pId = playerNameMap[pName];
-                            newVotes[item.categoryId][pId] = item.vote[pName];
-                        });
-                    });
-
-                    if (newPlayers.length > 0) state.players = newPlayers;
-                    state.votes = newVotes;
-                    renderTable();
-                    save();
-                    alert("Import Successful!");
-                } catch (err) {
-                    alert("Invalid JSON format");
-                }
+            reader.onload = (e) => {
+                state = JSON.parse(e.target.result);
+                renderTable();
+                save();
             };
             reader.readAsText(file);
         }
 
         function resetGame() {
-            if(confirm("Clear all data?")) {
+            if(confirm("Reset data?")) {
                 localStorage.removeItem(STORAGE_KEY);
                 location.reload();
             }

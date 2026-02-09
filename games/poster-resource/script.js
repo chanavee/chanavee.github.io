@@ -4,31 +4,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const GRID_COLS = 10;
     const TOTAL_IMAGES = 20;
 
-    // placeholder images - USER: REPLACE THESE WITH YOUR ACTUAL IMAGE PATHS
     // Put your images in the 'img' folder and update these filenames
-    // const posters = [
-    //     'img/1.jpg',
-    //     'img/2.jpg',
-    //     'img/3.jpg',
-    //     'img/4.jpg',
-    //     'img/5.jpg'
-    // ];
-    const posters = Array.from({ length: TOTAL_IMAGES }, (_, i) => `/games/movie-poster/img/${i + 1}.jpg`);
+    const posters = Array.from({ length: TOTAL_IMAGES }, (_, i) => `/games/poster/img/${i + 1}.jpg`);
     function preloadImages() {
-    posters.forEach(src => {
-        const img = new Image();
-        img.src = src;
-    });
-    console.log(`${posters.length} images preloaded.`);
-}
+        posters.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
+        console.log(`${posters.length} images preloaded.`);
+    }
 
-    let currentPosterIndex = -1;
     let availablePosters = [...posters];
     const posterImage = document.getElementById('poster-image');
     const gridOverlay = document.getElementById('grid-overlay');
     const gridContainer = document.getElementById('poster-container');
     const btnShowAll = document.getElementById('btn-show-all');
     const btnNext = document.getElementById('btn-next');
+    const btnRandomReveal = document.getElementById('btn-random-reveal');
     const messageDisplay = document.getElementById('message');
 
     // Initialize Game
@@ -46,20 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Event Listeners
         btnShowAll.addEventListener('click', revealAll);
         btnNext.addEventListener('click', nextPoster);
+        btnRandomReveal.addEventListener('click', revealRandomTile);
     }
 
     function loadRandomPoster() {
-        if (availablePosters.length === 0) {
-            availablePosters = [...posters];
-        }
-
-        // Pick random index
-        const randomIndex = Math.floor(Math.random() * availablePosters.length);
-        const selectedPoster = availablePosters[randomIndex];
-
-        // Remove from available so we don't repeat immediately until reset
-        availablePosters.splice(randomIndex, 1);
-
+        const selectedPoster = getRandomPosterAndRemove();
         posterImage.src = selectedPoster;
         posterImage.onerror = () => {
             // Fallback if image not found (since user hasn't added them yet)
@@ -68,6 +51,21 @@ document.addEventListener('DOMContentLoaded', () => {
             messageDisplay.textContent = "Please add images to img/ folder!";
         };
     }
+
+    function getRandomPosterAndRemove() {
+        if (availablePosters.length === 0) {
+            availablePosters = [...posters]; // reset when empty
+        }
+
+        const randomIndex = Math.floor(Math.random() * availablePosters.length);
+        const poster = availablePosters[randomIndex];
+
+        // remove selected poster from array
+        availablePosters.splice(randomIndex, 1);
+        console.log(poster, availablePosters);
+        return poster;
+    }
+
 
     function createGrid() {
         gridOverlay.innerHTML = '';
@@ -91,6 +89,14 @@ document.addEventListener('DOMContentLoaded', () => {
         tiles.forEach(tile => {
             tile.classList.add('revealed');
         });
+    }
+
+    function revealRandomTile() {
+        const hiddenTiles = Array.from(document.querySelectorAll('.tile:not(.revealed)'));
+        if (hiddenTiles.length > 0) {
+            const randomIndex = Math.floor(Math.random() * hiddenTiles.length);
+            hiddenTiles[randomIndex].classList.add('revealed');
+        }
     }
 
     function nextPoster() {
