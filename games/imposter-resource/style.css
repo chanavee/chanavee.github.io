@@ -1,0 +1,266 @@
+/* Base Reset & Variables */
+:root {
+    --bg-color: #1a1a2e;
+    --card-bg: #16213e;
+    --accent-color: #e94560;
+    --text-main: #ffffff;
+    --text-secondary: #0f3460;
+    --imposter-red: #ff3e4d;
+    --innocent-blue: #4cd137;
+    --font-family: 'Poppins', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    /* Prevent scroll on mobile */
+    touch-action: manipulation;
+    /* Prevent zoom */
+}
+
+.container {
+    width: 100%;
+    max-width: 480px;
+    /* Mobile width constraint */
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Form Styles */
+.setup-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #ccc;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid var(--text-secondary);
+    background: var(--card-bg);
+    /* Dark input bg */
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--accent-color);
+}
+
+/* Button Styles */
+button {
+    background: linear-gradient(45deg, var(--accent-color), #c0392b);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+button:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 10px rgba(233, 69, 96, 0.2);
+}
+
+button.secondary {
+    background: transparent;
+    /* Changed from variable to standard */
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+    box-shadow: none;
+}
+
+/* Screen Transitions */
+.screen {
+    display: none;
+    /* Initially hidden */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    height: 100%;
+    justify-content: center;
+}
+
+/* Game Card */
+.card-container {
+    perspective: 1000px;
+    width: 100%;
+    height: 300px;
+    margin: 20px 0;
+    position: relative;
+    cursor: pointer;
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    /* Centering content */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Flip Logic managed by class */
+.card.flipped {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.card-front {
+    background: var(--card-bg);
+    border: 4px solid var(--text-secondary);
+    color: #ccc;
+}
+
+.card-back {
+    background: var(--bg-color);
+    /* Reveal Color */
+    transform: rotateY(180deg);
+    border: 4px solid var(--accent-color);
+    color: white;
+    text-align: center;
+}
+
+.role-text {
+    font-size: 2.5rem;
+    margin-top: 10px;
+    word-break: break-word;
+}
+
+.imposter-role {
+    color: var(--imposter-red);
+    text-shadow: 0 0 10px rgba(255, 62, 77, 0.6);
+}
+
+.innocent-role {
+    color: var(--innocent-blue);
+    text-shadow: 0 0 10px rgba(76, 209, 55, 0.6);
+}
+
+/* Instruction Text */
+.instruction {
+    color: #aaa;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+/* Result Screen */
+.result-list {
+    text-align: left;
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 20px 0;
+    padding: 0 20px;
+}
+
+.result-item {
+    background: rgba(255, 255, 255, 0.05);
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Loading Spinner */
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid var(--accent-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Error Message */
+#error-msg {
+    color: var(--imposter-red);
+    margin-top: 10px;
+    font-size: 0.9rem;
+    min-height: 1.2rem;
+}

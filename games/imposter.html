@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Imposter Game</title>
+    <!-- Use Google Fonts for premium feel -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="imposter-resource/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Setup Screen -->
+        <div id="setup-screen" class="screen active">
+            <h1>Imposter</h1>
+
+            <div class="setup-group">
+                <label for="category-select">Category</label>
+                <select id="category-select">
+                    <option disabled selected>Loading...</option>
+                </select>
+            </div>
+
+            <div class="setup-group">
+                <label for="player-count">Number of Players</label>
+                <input type="number" id="player-count" value="4" min="3" inputmode="numeric">
+            </div>
+
+            <div class="setup-group">
+                <label for="imposter-count">Number of Imposters</label>
+                <input type="number" id="imposter-count" value="1" min="1" inputmode="numeric">
+            </div>
+
+            <p id="error-msg"></p>
+
+            <button id="start-btn">Start Game</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <h2 id="player-turn">Player 1</h2>
+
+            <div class="card-container">
+                <div id="role-card" class="card">
+                    <!-- Front -->
+                    <div class="card-face card-front" id="card-front-content">
+                        <span style="font-size:3rem">?</span><br>
+                        Tap Button to Reveal
+                    </div>
+                    <!-- Back (Hidden by default) -->
+                    <div class="card-face card-back" id="card-back-content">
+                        <!-- Content injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <button id="action-btn">Reveal Role</button>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="screen">
+            <div class="result-content">
+                <h1 style="color: var(--innocent-blue)">Game On!</h1>
+                <div id="game-status">
+                    <!-- Status injected by JS -->
+                </div>
+            </div>
+            <button id="new-game-btn">Play Again</button>
+        </div>
+    </div>
+
+    <script src="imposter-resource/script.js"></script>
+</body>
+
+</html>

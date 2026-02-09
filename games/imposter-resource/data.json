@@ -1,0 +1,54 @@
+{
+  "categories": [
+    {
+      "name": "Food",
+      "items": [
+        "Pizza",
+        "Burger",
+        "Sushi",
+        "Pasta",
+        "Taco",
+        "Salad",
+        "Steak",
+        "Ice Cream",
+        "Chocolate",
+        "Donut",
+        "Apple",
+        "Banana",
+        "Strawberry",
+        "Rice",
+        "Bread",
+        "Chicken",
+        "Fish",
+        "Curry",
+        "Soup",
+        "Sandwich"
+      ]
+    },
+    {
+      "name": "Animals",
+      "items": [
+        "Dog",
+        "Cat",
+        "Lion",
+        "Tiger",
+        "Elephant",
+        "Giraffe",
+        "Zebra",
+        "Monkey",
+        "Bear",
+        "Wolf",
+        "Fox",
+        "Rabbit",
+        "Deer",
+        "Horse",
+        "Cow",
+        "Pig",
+        "Sheep",
+        "Goat",
+        "Chicken",
+        "Duck"
+      ]
+    }
+  ]
+}
