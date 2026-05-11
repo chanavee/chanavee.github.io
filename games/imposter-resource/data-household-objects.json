@@ -10,10 +10,8 @@
   "Plate",
   "Spoon",
   "Fork",
-  "Frying Pan",
   "Knife",
   "Broom",
-  "Mop",
   "Trash Can",
   "Towel",
   "Soap",
@@ -28,5 +26,7 @@
   "Microwave",
   "Washing Machine",
   "Fan",
-  "Umbrella"
+  "Umbrella",
+  "Door",
+  "Window"
 ]

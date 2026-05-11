@@ -15,7 +15,6 @@
   "Scooter",
   "Skateboard",
   "Rollerblades",
-  "Horse",
   "Rocket",
   "Submarine",
   "Ambulance",
@@ -28,5 +27,6 @@
   "Kayak",
   "Wheelchair",
   "Stroller",
-  "Tank"
+  "Ferry",
+  "Yacht"
 ]

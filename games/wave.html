@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wavelength</title>
+    <!-- Use global styles if available, but primarily rely on game specific styles -->
+    <link rel="stylesheet" href="../main/css/style.css">
+    <link rel="stylesheet" href="wave-resource/style.css?v=2">
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+
+<body class="theme-dark">
+    <!-- UI Container -->
+    <div id="app" class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-container">
+                <div class="logo-icon"><i data-feather="star"></i></div>
+                <h1>Wavelength</h1>
+            </div>
+            <div class="score-container">
+                <span class="score-label">Team Score</span>
+                <span id="score" class="score-value">0</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Setup Phase -->
+            <div id="phase-setup" class="phase-container active">
+                <h2>Sync your minds.</h2>
+                <p>The ultimate "how well do you know me?" party game.</p>
+                <button id="btn-start" class="btn-primary">
+                    Start Game <i data-feather="chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Game Phase (Psychic, Team, Reveal) -->
+            <div id="phase-game" class="phase-container hidden">
+                <!-- Slider Section -->
+                <div class="slider-section">
+                    <div class="slider-layout">
+                        <div class="prompts-header">
+                            <div class="prompt-card left">
+                                <span class="prompt-label">Left</span>
+                                <span id="prompt-left" class="prompt-text"></span>
+                            </div>
+                            
+                            <div class="prompt-card right">
+                                <span class="prompt-label">Right</span>
+                                <span id="prompt-right" class="prompt-text"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="slider-container" id="slider-container">
+                            <div class="slider-track" id="slider-track">
+                                <div id="target-zones" class="target-zones hidden">
+                                    <!-- Drawn via JS -->
+                                </div>
+                            </div>
+                            <input type="range" id="guess-slider" min="0" max="100" value="50" class="guess-slider">
+                        </div>
+                    </div>
+
+                    <!-- Psychic Controls -->
+                    <div id="controls-psychic" class="controls hidden">
+                        <div class="badge badge-psychic"><i data-feather="eye"></i> Psychic View</div>
+                        <p>Study the target, give your one-word clue, then pass the device.</p>
+                        <button id="btn-given-clue" class="btn-secondary">I've given my clue</button>
+                    </div>
+
+                    <!-- Team Controls -->
+                    <div id="controls-team" class="controls hidden">
+                        <div class="badge badge-team"><i data-feather="users"></i> Team Guessing</div>
+                        <p>Slide to where you think the clue falls on the spectrum.</p>
+                        <button id="btn-lock-guess" class="btn-primary">Lock in Guess</button>
+                    </div>
+
+                    <!-- Reveal Controls -->
+                    <div id="controls-reveal" class="controls hidden">
+                        <div id="reveal-result" class="reveal-result"></div>
+                        <button id="btn-next-round" class="btn-secondary">
+                            <i data-feather="refresh-cw"></i> Next Round
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <i data-feather="info"></i> Slide the marker to guess
+        </footer>
+    </div>
+
+    <script src="wave-resource/script.js"></script>
+</body>
+
+</html>
